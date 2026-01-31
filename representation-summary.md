@@ -76,7 +76,7 @@ They **CANNOT** represent taxpayers before:
 
 | Path | Requirements | Process |
 |------|--------------|---------|
-| **Examination** | Pass all 3 parts of SEE | Apply for enrollment within 2 years of passing last part |
+| **Examination** | Pass all 3 parts of SEE | Apply for enrollment within 1 year of passing last part |
 | **IRS Experience** | 5+ years continuous IRS employment | Must have interpreted and applied tax law |
 
 **Maintaining Enrollment:**
@@ -636,7 +636,7 @@ Contingent fees ARE allowed for:
 | 6695(c) | Failure to furnish PTIN | $60 | $30,000/year |
 | 6695(d) | Failure to retain copy or list | $60 | $30,000/year |
 | 6695(e) | Failure to file correct information return | $60 | $30,000/year |
-| 6695(f) | Negotiating refund check | $600 | No maximum |
+| 6695(f) | Negotiating refund check | $635 | No maximum |
 | 6695(g) | Due diligence failure | $635 | No maximum |
 
 ### Defenses to Preparer Penalties
@@ -802,7 +802,7 @@ The Taxpayer Advocate Service (TAS) is an **independent organization within the 
 | §6694(a) Unreasonable position | $1,000 or 50% of fee | Whichever greater |
 | §6694(b) Willful/reckless | $5,000 or 75% of fee | Whichever greater |
 | §6695(a)-(e) Administrative | $60 each | $30,000/year each |
-| §6695(f) Negotiating check | $600 | No maximum |
+| §6695(f) Negotiating check | $635 | No maximum |
 | §6695(g) Due diligence | $635 | No maximum |
 
 ### Due Diligence Requirements
