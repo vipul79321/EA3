@@ -1,0 +1,691 @@
+# IRS Tax Scenarios Navigation Flowchart
+
+## Complete Decision Guide for Enrolled Agents
+
+*Based on PassKey EA Review Part 3: Representation (May 2025 - February 2026 Testing Cycle)*
+
+---
+
+## Table of Contents
+
+1. [Master Flowchart - Complete Tax Lifecycle](#master-flowchart---complete-tax-lifecycle)
+2. [Filing and Payment Timeline](#1-filing-and-payment-timeline-flowchart)
+3. [Penalty Assessment](#2-penalty-assessment-flowchart)
+4. [Statute of Limitations](#3-statute-of-limitations-flowchart)
+5. [IRS Collection Process](#4-irs-collection-process-flowchart)
+6. [Lien vs. Levy Decision Tree](#5-federal-tax-lien-vs-levy-flowchart)
+7. [Payment Options](#6-payment-options-flowchart)
+8. [Examination (Audit) Process](#7-examination-audit-process-flowchart)
+9. [Appeals and Litigation](#8-appeals-and-litigation-flowchart)
+10. [Collection Due Process (CDP)](#9-collection-due-process-cdp-flowchart)
+
+---
+
+## Master Flowchart - Complete Tax Lifecycle
+
+This master flowchart shows how all tax scenarios interconnect from filing through collection and appeals.
+
+```mermaid
+flowchart TD
+    subgraph Phase1["PHASE 1: FILING"]
+        Start([Tax Year Ends]) --> Due[Return Due Date]
+        Due --> Filed{Return<br/>Filed?}
+        Filed -->|Yes| TimelyFiled{Filed by<br/>Due Date?}
+        Filed -->|No| NoFile[NO RETURN FILED]
+        TimelyFiled -->|Yes| OnTime[Timely Filed]
+        TimelyFiled -->|No| Late[Late Filed]
+    end
+
+    subgraph Phase2["PHASE 2: PAYMENT"]
+        OnTime --> TaxDue{Tax<br/>Owed?}
+        Late --> TaxDue
+        TaxDue -->|No| Refund[Refund Issued]
+        TaxDue -->|Yes| Paid{Paid by<br/>Due Date?}
+        Paid -->|Yes, Full| Complete([OBLIGATION COMPLETE])
+        Paid -->|Yes, Partial| PartialPay[Partial Payment]
+        Paid -->|No| NoPay[No Payment]
+    end
+
+    subgraph Phase3["PHASE 3: PENALTIES"]
+        Late --> FTF[Failure to File Penalty<br/>5% per month - max 25%]
+        PartialPay --> FTP[Failure to Pay Penalty<br/>0.5% per month - max 25%]
+        NoPay --> FTP
+        FTF --> FTP
+        NoFile --> UnlimitedSOL[Unlimited SOL<br/>No Assessment Deadline]
+    end
+
+    subgraph Phase4["PHASE 4: ASSESSMENT"]
+        FTP --> Assessment[IRS Assessment Made]
+        UnlimitedSOL --> Assessment
+        Assessment --> SOLCheck{Within<br/>SOL?}
+        SOLCheck -->|3yr Normal| Assess3[Assessment Valid]
+        SOLCheck -->|6yr >25% Omit| Assess6[Assessment Valid]
+        SOLCheck -->|Expired| Barred[Assessment Barred]
+    end
+
+    subgraph Phase5["PHASE 5: COLLECTION"]
+        Assess3 --> CP14[CP14: Balance Due Notice]
+        Assess6 --> CP14
+        CP14 --> Reminders[CP501/503/504 Reminders]
+        Reminders --> Response{Taxpayer<br/>Responds?}
+        Response -->|Yes| PayOptions[Payment Options]
+        Response -->|No| Lien[Federal Tax Lien Filed]
+        Lien --> FinalNotice[Final Notice:<br/>Intent to Levy]
+        FinalNotice --> CDP{CDP Hearing<br/>Requested?}
+        CDP -->|Yes| CDPHearing[CDP Hearing<br/>Collection Suspended]
+        CDP -->|No| Levy[LEVY ACTION]
+    end
+
+    subgraph Phase6["PHASE 6: RESOLUTION"]
+        PayOptions --> FullPay[Full Payment]
+        PayOptions --> IA[Installment Agreement]
+        PayOptions --> OIC[Offer in Compromise]
+        PayOptions --> CNC[Currently Not Collectible]
+        FullPay --> Resolved([CASE CLOSED])
+        IA --> Resolved
+        OIC --> Resolved
+        CDPHearing --> CDPOutcome{CDP<br/>Outcome}
+        CDPOutcome -->|Favorable| Released[Lien/Levy Released]
+        CDPOutcome -->|Unfavorable| TaxCourtAppeal[Appeal to Tax Court]
+    end
+
+    subgraph Phase7["PHASE 7: AUDIT PATH"]
+        Assessment -.->|IRS Selects| Audit[Examination/Audit]
+        Audit --> AuditResult{Audit<br/>Result}
+        AuditResult -->|No Change| AuditClosed([Case Closed])
+        AuditResult -->|Changes| ThirtyDay[30-Day Letter]
+        ThirtyDay --> Agree{Taxpayer<br/>Agrees?}
+        Agree -->|Yes| PayDeficiency[Pay Deficiency]
+        Agree -->|No| NinetyDay[90-Day Letter<br/>Notice of Deficiency]
+        NinetyDay --> TaxCourt{Petition<br/>Tax Court?}
+        TaxCourt -->|Yes, 90 days| USTC[U.S. Tax Court]
+        TaxCourt -->|No| FinalAssess[Assessment Final]
+    end
+```
+
+---
+
+## 1. Filing and Payment Timeline Flowchart
+
+### Individual Tax Returns (Form 1040)
+
+```mermaid
+flowchart TD
+    subgraph Dates["KEY DATES"]
+        TaxYear[Tax Year Ends: Dec 31] --> OriginalDue[Original Due Date:<br/>April 15]
+        OriginalDue --> Weekend{Falls on<br/>Weekend/Holiday?}
+        Weekend -->|Yes| NextBiz[Next Business Day]
+        Weekend -->|No| April15[April 15 Deadline]
+    end
+
+    subgraph Extension["EXTENSION SCENARIOS"]
+        April15 --> NeedMore{Need More<br/>Time to FILE?}
+        NeedMore -->|Yes| FileExt[File Form 4868<br/>Automatic 6-Month Extension]
+        FileExt --> ExtDue[Extended Due Date:<br/>October 15]
+        NeedMore -->|No| FileNow[File by April 15]
+    end
+
+    subgraph Payment["PAYMENT TIMING - CRITICAL"]
+        ExtDue --> PaymentNote[PAYMENT STILL DUE APRIL 15<br/>Extension is for FILING only<br/>NOT for PAYMENT]
+        PaymentNote --> EstPay{Estimate<br/>Tax Owed?}
+        EstPay -->|Yes| PayWithExt[Pay with Extension Request<br/>Avoid Late Payment Penalty]
+        EstPay -->|No| RiskPenalty[Risk Late Payment<br/>Penalty + Interest]
+    end
+
+    subgraph Determination["TIMELY DETERMINATION"]
+        FileNow --> Postmark{Postmarked by<br/>Due Date?}
+        Postmark -->|Yes| TimelyFiled[TIMELY FILED]
+        Postmark -->|No| LateFiled[LATE FILED]
+        TimelyFiled --> PaidCheck{Tax Paid by<br/>Due Date?}
+        PaidCheck -->|Full Payment| AllGood([No Penalties])
+        PaidCheck -->|Partial/Late| LatePay[Late Payment<br/>Penalties Apply]
+        LateFiled --> BothPenalties[Both Filing AND<br/>Payment Penalties]
+    end
+```
+
+### Business Entity Due Dates
+
+```mermaid
+flowchart LR
+    subgraph Entities["ENTITY TYPE"]
+        SCorp[S-Corporation<br/>Form 1120-S]
+        Partner[Partnership<br/>Form 1065]
+        CCorp[C-Corporation<br/>Form 1120]
+        Estate[Estate/Trust<br/>Form 1041]
+    end
+
+    subgraph DueDates["ORIGINAL DUE DATES"]
+        SCorp --> Mar15[March 15]
+        Partner --> Mar15
+        CCorp --> Apr15[April 15]
+        Estate --> Apr15
+    end
+
+    subgraph Extended["EXTENDED DUE DATES"]
+        Mar15 --> Sept15[September 15<br/>6-Month Extension]
+        Apr15 --> Oct15[October 15<br/>6-Month Extension]
+    end
+```
+
+---
+
+## 2. Penalty Assessment Flowchart
+
+```mermaid
+flowchart TD
+    subgraph Determine["DETERMINE PENALTY TYPE"]
+        Start[Tax Due but Not Paid] --> Filed{Return<br/>Filed?}
+        Filed -->|No| FTF[Failure to File Penalty]
+        Filed -->|Yes| CheckPay{Full Payment<br/>by Due Date?}
+        CheckPay -->|No| FTP[Failure to Pay Penalty]
+        CheckPay -->|Yes| NoPenalty([No Penalty])
+    end
+
+    subgraph FTFCalc["FAILURE TO FILE PENALTY"]
+        FTF --> FTFRate[5% of unpaid tax<br/>per month or partial month]
+        FTFRate --> FTFMax[Maximum: 25%<br/>5 months]
+        FTFMax --> FTFMin{Return 60+<br/>days late?}
+        FTFMin -->|Yes| MinPenalty[Minimum Penalty:<br/>Lesser of $510 or<br/>100% of tax due]
+        FTFMin -->|No| NoMin[Standard Calculation]
+    end
+
+    subgraph FTPCalc["FAILURE TO PAY PENALTY"]
+        FTP --> FTPRate[0.5% of unpaid tax<br/>per month or partial month]
+        FTPRate --> FTPMax[Maximum: 25%<br/>50 months]
+        FTPMax --> LevyIssued{Levy Notice<br/>Issued?}
+        LevyIssued -->|Yes| Increase[Increases to 1%<br/>per month]
+        LevyIssued -->|No| Standard[Remains 0.5%]
+    end
+
+    subgraph Combined["COMBINED PENALTIES"]
+        FTFCalc --> Both{Both Penalties<br/>Apply?}
+        FTPCalc --> Both
+        Both -->|Yes| Reduction[FTF Reduced to 4.5%<br/>FTF 4.5% + FTP 0.5% = 5% total per month]
+        Both -->|No| Single[Single Penalty Applies]
+        Reduction --> MaxCombined[Maximum Combined:<br/>47.5% total<br/>25% FTF + 22.5% FTP for months 1-5<br/>then 0.5% FTP continues]
+    end
+
+    subgraph Interest["INTEREST CALCULATION"]
+        MaxCombined --> InterestCalc[Interest: Federal Short-Term Rate + 3%]
+        Single --> InterestCalc
+        InterestCalc --> Compound[Compounded Daily<br/>Runs from Due Date until Paid]
+    end
+
+    subgraph Special["SPECIAL PENALTIES"]
+        Accuracy[Accuracy-Related Penalty<br/>20% of underpayment]
+        Fraud[Civil Fraud Penalty<br/>75% of underpayment]
+        Accuracy --> Negligence[Negligence or<br/>Substantial Understatement]
+        Fraud --> Replace[Replaces Accuracy Penalty<br/>Does NOT stack]
+    end
+```
+
+### Penalty Rate Quick Reference
+
+| Penalty | Rate | Maximum | Special Rules |
+|---------|------|---------|---------------|
+| Failure to File | 5%/month | 25% | Min $510 if 60+ days late |
+| Failure to Pay | 0.5%/month | 25% | Increases to 1% after levy notice |
+| Combined (same month) | 5%/month | 47.5% | FTF reduced to 4.5% |
+| Accuracy-Related | 20% | N/A | Negligence/substantial understatement |
+| Civil Fraud | 75% | N/A | Replaces accuracy penalty |
+
+---
+
+## 3. Statute of Limitations Flowchart
+
+```mermaid
+flowchart TD
+    subgraph Assessment["ASSESSMENT STATUTE OF LIMITATIONS"]
+        Start[Return Filed] --> SOLStart[SOL Begins:<br/>Later of Filing Date<br/>or Due Date]
+        SOLStart --> Analyze{Analyze<br/>Return}
+        
+        Analyze -->|Normal Return| ThreeYear[3-YEAR RULE<br/>Standard Assessment Period]
+        Analyze -->|Omission >25%| SixYear[6-YEAR RULE<br/>Substantial Omission]
+        Analyze -->|Fraud| Unlimited1[UNLIMITED<br/>Fraudulent Return]
+        Analyze -->|No Return| Unlimited2[UNLIMITED<br/>No Return Filed]
+    end
+
+    subgraph ThreeYearDetail["3-YEAR RULE DETAILS"]
+        ThreeYear --> Example1[Example: Return filed April 15, 2024<br/>SOL expires April 15, 2027]
+        Example1 --> EarlyFile{Filed<br/>Early?}
+        EarlyFile -->|Yes| DueDateRule[SOL runs from DUE DATE<br/>not filing date]
+        EarlyFile -->|No| FileDate[SOL runs from<br/>actual filing date]
+    end
+
+    subgraph SixYearDetail["6-YEAR RULE DETAILS"]
+        SixYear --> OmissionCalc[Omitted Gross Income<br/>exceeds 25% of<br/>Gross Income Reported]
+        OmissionCalc --> Example2[Example: Reported $100K<br/>Omitted $30K = 30%<br/>6-Year SOL Applies]
+    end
+
+    subgraph Extensions["SOL EXTENSIONS/SUSPENSIONS"]
+        ThreeYearDetail --> Extend{SOL<br/>Extended?}
+        SixYearDetail --> Extend
+        Extend -->|Form 872| Consent[Taxpayer Consent<br/>Extends SOL]
+        Extend -->|Bankruptcy| Suspend[SOL Suspended<br/>During Bankruptcy + 60 days]
+        Extend -->|Outside US| Absent[SOL Suspended<br/>While Absent from US]
+    end
+
+    subgraph Collection["COLLECTION STATUTE (CSED)"]
+        Assessment2[Assessment Made] --> CSED[10-YEAR COLLECTION PERIOD<br/>Collection Statute Expiration Date]
+        CSED --> CSEDSuspend{CSED<br/>Suspended?}
+        CSEDSuspend -->|OIC Pending| Suspend1[Suspended During OIC<br/>+ 30 days]
+        CSEDSuspend -->|IA Request| Suspend2[Suspended During IA Request<br/>+ 30 days]
+        CSEDSuspend -->|CDP Hearing| Suspend3[Suspended During CDP]
+        CSEDSuspend -->|Bankruptcy| Suspend4[Suspended During<br/>Bankruptcy + 6 months]
+    end
+
+    subgraph Refund["REFUND CLAIM SOL"]
+        RefundClaim[Claim for Refund] --> RefundRule{Which<br/>Applies?}
+        RefundRule --> Rule1[3 Years from Filing<br/>Original Return]
+        RefundRule --> Rule2[2 Years from<br/>Payment Date]
+        Rule1 --> Later[LATER of the Two<br/>Dates Applies]
+        Rule2 --> Later
+        Later --> RefundLimit[Refund Limited to<br/>Tax Paid Within<br/>Lookback Period]
+    end
+```
+
+### Statute of Limitations Quick Reference
+
+| Situation | Period | Starts From | Notes |
+|-----------|--------|-------------|-------|
+| Normal Return | 3 years | Later of due date or filing date | Standard rule |
+| >25% Gross Income Omission | 6 years | Later of due date or filing date | Substantial omission |
+| Fraudulent Return | Unlimited | N/A | No expiration |
+| No Return Filed | Unlimited | N/A | No expiration |
+| Collection (CSED) | 10 years | Date of assessment | Can be suspended |
+| Refund Claim | 3 yrs from filing OR 2 yrs from payment | Whichever is later | Refund limited to lookback |
+
+---
+
+## 4. IRS Collection Process Flowchart
+
+```mermaid
+flowchart TD
+    subgraph Notice["NOTICE SEQUENCE"]
+        Assessment[Assessment Made<br/>Tax Owed] --> CP14[CP14: First Balance Due Notice<br/>~5 weeks after filing]
+        CP14 --> CP501[CP501: First Reminder<br/>~5 weeks later]
+        CP501 --> CP503[CP503: Second Reminder<br/>~5 weeks later]
+        CP503 --> CP504[CP504: Intent to Levy<br/>State Tax Refund<br/>~5 weeks later]
+    end
+
+    subgraph Lien["FEDERAL TAX LIEN"]
+        CP504 --> LienArises[Statutory Lien Arises<br/>Assessment + Notice + Demand + Non-payment]
+        LienArises --> NFTL{IRS Files<br/>NFTL?}
+        NFTL -->|Yes| PublicRecord[Notice of Federal Tax Lien<br/>Form 668Y<br/>Public Record - Affects Credit]
+        NFTL -->|No| SecretLien[Lien Exists but<br/>Not Public]
+    end
+
+    subgraph FinalNotice["FINAL NOTICE - CDP RIGHTS"]
+        PublicRecord --> Letter1058[Letter 1058 or LT11<br/>Final Notice of Intent to Levy<br/>Collection Due Process Rights]
+        Letter1058 --> CDPRights[TAXPAYER HAS 30 DAYS<br/>to Request CDP Hearing]
+    end
+
+    subgraph CDPPath["CDP HEARING PATH"]
+        CDPRights --> RequestCDP{CDP<br/>Requested?}
+        RequestCDP -->|Yes, within 30 days| CDPHearing[CDP Hearing<br/>Collection SUSPENDED]
+        RequestCDP -->|No| NoProtection[No CDP Protection<br/>Levy Can Proceed]
+        CDPHearing --> CDPResult{CDP<br/>Determination}
+        CDPResult -->|Sustains IRS| AppealTC[30 Days to Appeal<br/>to Tax Court]
+        CDPResult -->|Taxpayer Wins| Relief[Collection Action<br/>Modified/Withdrawn]
+    end
+
+    subgraph Levy["LEVY ACTIONS"]
+        NoProtection --> LevyTypes{Levy<br/>Type}
+        AppealTC -->|No Appeal| LevyTypes
+        LevyTypes --> Wages[Wage Levy<br/>Continuous until Released]
+        LevyTypes --> Bank[Bank Levy<br/>One-time Seizure<br/>21-day Hold]
+        LevyTypes --> Property[Property Seizure<br/>Sale at Auction]
+    end
+
+    subgraph Timeline["TYPICAL TIMELINE"]
+        TimeNote[Total Time from Assessment to Levy:<br/>Approximately 4-6 months minimum<br/>if taxpayer does not respond]
+    end
+```
+
+### IRS Notice Quick Reference
+
+| Notice | Purpose | Timing | Action Required |
+|--------|---------|--------|-----------------|
+| CP14 | Initial balance due | ~5 weeks after filing | Pay or contact IRS |
+| CP501 | First reminder | ~5 weeks after CP14 | Pay or arrange payment |
+| CP503 | Second reminder | ~5 weeks after CP501 | Urgent - respond |
+| CP504 | Intent to levy state refund | ~5 weeks after CP503 | Final warning before lien |
+| Letter 1058/LT11 | Final notice - CDP rights | Before levy | 30 days to request CDP |
+
+---
+
+## 5. Federal Tax Lien vs. Levy Flowchart
+
+```mermaid
+flowchart TD
+    subgraph Lien["FEDERAL TAX LIEN"]
+        LienDef[LIEN = Legal CLAIM<br/>Against ALL Property]
+        LienDef --> LienArise[Arises Automatically When:<br/>1. Assessment Made<br/>2. Notice and Demand Sent<br/>3. Taxpayer Fails to Pay]
+        LienArise --> LienEffect[Effects:<br/>- Attaches to all property<br/>- Protects government priority<br/>- Can affect credit score]
+        LienEffect --> NFTL[Notice of Federal Tax Lien<br/>Form 668Y<br/>Filed with County/State]
+        NFTL --> LienPublic[Makes Lien PUBLIC<br/>- Credit bureaus notified<br/>- Other creditors on notice]
+    end
+
+    subgraph Levy["LEVY"]
+        LevyDef[LEVY = Actual SEIZURE<br/>of Specific Property]
+        LevyDef --> LevyReq[Requirements Before Levy:<br/>1. Tax assessed and unpaid<br/>2. Notice and demand sent<br/>3. 30-day Final Notice<br/>4. CDP rights provided]
+        LevyReq --> LevyAction[Levy Actions:<br/>- Garnish wages<br/>- Seize bank accounts<br/>- Take property]
+    end
+
+    subgraph Compare["COMPARISON"]
+        Comparison{Key<br/>Difference}
+        Comparison -->|Lien| Passive[PASSIVE<br/>Secures debt<br/>Does not take property]
+        Comparison -->|Levy| Active[ACTIVE<br/>Actually takes<br/>property/money]
+    end
+
+    subgraph Release["RELEASE/WITHDRAWAL"]
+        LienRelease[Lien Released When:<br/>- Debt paid in full<br/>- Bond accepted<br/>- 10-year CSED expires<br/>- Accepted OIC]
+        LevyRelease[Levy Released When:<br/>- Debt satisfied<br/>- Installment agreement<br/>- Hardship shown<br/>- CSED expires]
+    end
+
+    subgraph Exempt["PROPERTY EXEMPT FROM LEVY"]
+        ExemptList[Cannot Levy:<br/>- Necessary clothing/schoolbooks<br/>- Furniture up to $9,840<br/>- Tools of trade up to $4,920<br/>- Unemployment benefits<br/>- Workers compensation<br/>- Child support payments<br/>- Minimum exempt wages<br/>- Principal residence*]
+        ExemptList --> ResNote[*Principal residence requires<br/>court approval and<br/>written approval from<br/>IRS District Director]
+    end
+```
+
+### Lien vs. Levy Comparison Table
+
+| Aspect | Federal Tax Lien | Levy |
+|--------|------------------|------|
+| **What it is** | Legal claim against property | Actual seizure of property |
+| **When it arises** | Automatic: assessment + notice + non-payment | Requires 30-day final notice |
+| **Effect** | Secures government interest | Takes property/wages/bank funds |
+| **Public notice** | NFTL filed with county/state | N/A |
+| **Credit impact** | Yes, after NFTL filed | N/A directly |
+| **Property affected** | All property (current & future) | Specific property seized |
+| **Release** | Full payment, bond, CSED expires, OIC | Payment, hardship, IA, CSED expires |
+
+---
+
+## 6. Payment Options Flowchart
+
+```mermaid
+flowchart TD
+    subgraph Start["TAXPAYER OWES BALANCE"]
+        Owe[Balance Due to IRS] --> Assess{Can Taxpayer<br/>Pay in Full?}
+    end
+
+    subgraph FullPay["FULL PAYMENT"]
+        Assess -->|Yes| Full[PAY IN FULL]
+        Full --> Methods[Payment Methods:<br/>- Direct Pay from bank<br/>- Credit/Debit card<br/>- Check/Money order<br/>- EFTPS]
+        Methods --> FullResult[Penalties/Interest STOP<br/>Case Closed]
+    end
+
+    subgraph ShortTerm["SHORT-TERM PLAN"]
+        Assess -->|No| ShortCheck{Can Pay Within<br/>180 Days?}
+        ShortCheck -->|Yes| Short[SHORT-TERM PAYMENT PLAN<br/>Up to 180 days]
+        Short --> ShortFee[No Setup Fee<br/>Penalties/Interest Continue]
+    end
+
+    subgraph Installment["INSTALLMENT AGREEMENT"]
+        ShortCheck -->|No| IACheck{Can Make<br/>Monthly Payments?}
+        IACheck -->|Yes| IAType{Amount<br/>Owed?}
+        
+        IAType -->|Under $10K| Guaranteed[GUARANTEED IA<br/>- Must pay in 3 years<br/>- Filed all returns<br/>- No IA in past 5 years]
+        
+        IAType -->|$10K-$50K| Streamlined[STREAMLINED IA<br/>- Up to 72 months<br/>- Direct debit required<br/>- No financial disclosure]
+        
+        IAType -->|Over $50K| Regular[REGULAR IA<br/>- Financial disclosure required<br/>- Form 433-F or 433-A]
+        
+        IAType -->|Any Amount| Partial[PARTIAL PAYMENT IA<br/>- Pay less than full balance<br/>- CSED may expire first]
+    end
+
+    subgraph OIC["OFFER IN COMPROMISE"]
+        IACheck -->|No| OICCheck{Doubt Liability<br/>or Collectibility?}
+        OICCheck -->|Yes| OICType{OIC<br/>Basis?}
+        
+        OICType --> DTL[DOUBT AS TO LIABILITY<br/>- Dispute exists about<br/>correct tax liability]
+        
+        OICType --> DTC[DOUBT AS TO COLLECTIBILITY<br/>- Cannot pay full amount<br/>- Based on RCP calculation]
+        
+        OICType --> ETA[EFFECTIVE TAX ADMINISTRATION<br/>- Can pay but exceptional<br/>circumstances exist]
+        
+        DTL --> OICProcess[Form 656<br/>$205 application fee<br/>20% payment with lump sum offer]
+        DTC --> OICProcess
+        ETA --> OICProcess
+    end
+
+    subgraph CNC["CURRENTLY NOT COLLECTIBLE"]
+        OICCheck -->|No| Hardship{Financial<br/>Hardship?}
+        Hardship -->|Yes| CNCStatus[CURRENTLY NOT COLLECTIBLE<br/>- Collection suspended<br/>- Lien may remain<br/>- 10-year CSED continues<br/>- Annual review possible]
+        Hardship -->|No| Enforce[Enforcement<br/>Action Proceeds]
+    end
+
+    subgraph Fees["SETUP FEES"]
+        FeeTable[IA Setup Fees:<br/>- Online direct debit: $22<br/>- Online other: $69<br/>- Phone/mail: $178<br/>- Low income: $0 or reduced]
+    end
+```
+
+### Payment Option Eligibility Quick Reference
+
+| Option | Amount Limit | Time Limit | Key Requirements |
+|--------|--------------|------------|------------------|
+| Full Payment | Any | Immediate | None |
+| Short-Term Plan | Any | 180 days | None |
+| Guaranteed IA | Under $10K | 3 years | All returns filed, no IA in 5 years |
+| Streamlined IA | $10K-$50K | 72 months | Direct debit, no financials |
+| Regular IA | Over $50K | Varies | Financial disclosure required |
+| Partial Payment IA | Any | Until CSED | Financial disclosure required |
+| Offer in Compromise | Any | Lump sum or periodic | Meet doubt/hardship criteria |
+| Currently Not Collectible | Any | Until review | Proven financial hardship |
+
+---
+
+## 7. Examination (Audit) Process Flowchart
+
+```mermaid
+flowchart TD
+    subgraph Selection["AUDIT SELECTION"]
+        Filed[Return Filed] --> Selection{How<br/>Selected?}
+        Selection --> DIF[DIF Score<br/>Discriminant Function<br/>Computer Scoring]
+        Selection --> Random[Random Selection<br/>National Research Program]
+        Selection --> Related[Related Examination<br/>Partner/Investor Returns]
+        Selection --> Info[Information Matching<br/>W-2/1099 Discrepancies]
+    end
+
+    subgraph Types["AUDIT TYPES"]
+        DIF --> Type{Audit<br/>Type?}
+        Random --> Type
+        Related --> Type
+        Info --> Type
+        
+        Type --> Corr[CORRESPONDENCE AUDIT<br/>- Conducted by mail<br/>- Specific items only<br/>- Simplest issues]
+        
+        Type --> Office[OFFICE AUDIT<br/>- At IRS office<br/>- Itemized deductions<br/>- Income verification]
+        
+        Type --> Field[FIELD AUDIT<br/>- At taxpayer location<br/>- Business returns<br/>- Complex issues<br/>- Most comprehensive]
+    end
+
+    subgraph Process["AUDIT PROCESS"]
+        Corr --> Examine[IRS Examiner<br/>Reviews Documents]
+        Office --> Examine
+        Field --> Examine
+        
+        Examine --> Result{Examination<br/>Result?}
+        Result -->|No Adjustment| NoChange[NO CHANGE LETTER<br/>Case Closed]
+        Result -->|Adjustment Proposed| Changes[Proposed Changes<br/>Examination Report]
+    end
+
+    subgraph Response["TAXPAYER RESPONSE"]
+        Changes --> ThirtyDay[30-DAY LETTER<br/>Proposed Adjustments<br/>Right to Appeal]
+        ThirtyDay --> Agree{Taxpayer<br/>Agrees?}
+        
+        Agree -->|Yes| Sign[Sign Form 870<br/>Consent to Assessment<br/>Pay Deficiency]
+        
+        Agree -->|Partial| Partial[Sign Form 870-AD<br/>Partial Agreement<br/>Unresolved Issues Continue]
+        
+        Agree -->|No| Disagree[Request Appeals<br/>Conference<br/>OR<br/>Wait for 90-Day Letter]
+    end
+
+    subgraph Notice["NOTICE OF DEFICIENCY"]
+        Disagree --> NinetyDay[90-DAY LETTER<br/>Notice of Deficiency<br/>Statutory Notice]
+        NinetyDay --> Deadline[CRITICAL: 90 Days to<br/>Petition Tax Court<br/>150 days if outside US]
+        Deadline --> Petition{Taxpayer<br/>Petitions?}
+        Petition -->|Yes| TaxCourt[U.S. Tax Court<br/>No Prepayment Required]
+        Petition -->|No| Final[Assessment Becomes<br/>FINAL and COLLECTIBLE]
+    end
+```
+
+### Audit Type Comparison
+
+| Audit Type | Location | Complexity | Typical Issues | Duration |
+|------------|----------|------------|----------------|----------|
+| Correspondence | Mail | Low | Math errors, missing forms, specific items | 3-6 months |
+| Office | IRS Office | Medium | Itemized deductions, income verification | 3-6 months |
+| Field | Taxpayer Location | High | Business returns, complex transactions | 6-12+ months |
+
+---
+
+## 8. Appeals and Litigation Flowchart
+
+```mermaid
+flowchart TD
+    subgraph Disagree["DISAGREEMENT WITH IRS"]
+        Start[Disagree with IRS<br/>Determination] --> Options{Choose<br/>Path}
+    end
+
+    subgraph Appeals["IRS OFFICE OF APPEALS"]
+        Options -->|Before Assessment| AppealRoute[IRS OFFICE OF APPEALS]
+        AppealRoute --> AppealFeatures[Features:<br/>- No prepayment required<br/>- Informal process<br/>- Settlement authority<br/>- Independent review]
+        AppealFeatures --> AppealHow[How to Request:<br/>- Small case: Letter<br/>- $25K+: Form 12203<br/>- Protest letter required]
+    end
+
+    subgraph TaxCourt["U.S. TAX COURT"]
+        Options -->|90-Day Letter Received| TCRoute[U.S. TAX COURT]
+        TCRoute --> TCFeatures[Features:<br/>- No prepayment required<br/>- Must petition within 90 days<br/>- Located in Washington DC<br/>- Judges travel nationwide]
+        TCFeatures --> TCOptions{Case<br/>Size?}
+        TCOptions -->|Under $50K| SmallCase[SMALL TAX CASE<br/>- Simplified procedures<br/>- No appeal allowed<br/>- Informal hearing]
+        TCOptions -->|$50K+| RegularCase[REGULAR CASE<br/>- Formal procedures<br/>- Appeal to Circuit Court<br/>- Binding precedent]
+    end
+
+    subgraph District["U.S. DISTRICT COURT"]
+        Options -->|Pay First| DistrictRoute[U.S. DISTRICT COURT]
+        DistrictRoute --> DistFeatures[Features:<br/>- Must pay tax first<br/>- Sue for refund<br/>- File within 2 years of<br/>  claim disallowance<br/>- JURY TRIAL available<br/>- Local venue]
+    end
+
+    subgraph Federal["COURT OF FEDERAL CLAIMS"]
+        Options -->|Pay First| FedRoute[U.S. COURT OF<br/>FEDERAL CLAIMS]
+        FedRoute --> FedFeatures[Features:<br/>- Must pay tax first<br/>- Sue for refund<br/>- Located in Washington DC<br/>- No jury trial<br/>- National jurisdiction]
+    end
+
+    subgraph AppealPath["APPELLATE COURTS"]
+        RegularCase --> Circuit[U.S. Court of Appeals<br/>Circuit Court]
+        DistrictRoute --> Circuit
+        FedRoute --> FedCircuit[U.S. Court of Appeals<br/>Federal Circuit]
+        Circuit --> Supreme[U.S. Supreme Court<br/>Discretionary Review]
+        FedCircuit --> Supreme
+    end
+
+    subgraph Decision["CHOOSING A FORUM"]
+        Choose{Decision<br/>Factors}
+        Choose --> NoPay[No prepayment preferred?<br/>TAX COURT]
+        Choose --> Jury[Want jury trial?<br/>DISTRICT COURT]
+        Choose --> Precedent[Favorable precedent in<br/>specific circuit?<br/>DISTRICT COURT in that circuit]
+        Choose --> Fast[Want faster resolution?<br/>SMALL TAX CASE]
+    end
+```
+
+### Court Comparison Table
+
+| Court | Prepayment Required? | Jury Trial? | Location | Appeal Route |
+|-------|---------------------|-------------|----------|--------------|
+| U.S. Tax Court | No | No | DC (judges travel) | Circuit Court |
+| U.S. District Court | Yes | Yes | Local | Circuit Court |
+| Court of Federal Claims | Yes | No | Washington DC | Federal Circuit |
+
+### Key Deadlines
+
+| Action | Deadline |
+|--------|----------|
+| Petition Tax Court | 90 days from Notice of Deficiency (150 if outside US) |
+| File Refund Suit | 2 years from claim disallowance |
+| Request Appeals | Within 30 days of 30-day letter |
+
+---
+
+## 9. Collection Due Process (CDP) Flowchart
+
+```mermaid
+flowchart TD
+    subgraph Triggers["CDP TRIGGERS"]
+        Trigger1[First Notice of Federal<br/>Tax Lien Filed] --> CDPRights[CDP RIGHTS<br/>TRIGGERED]
+        Trigger2[First Notice of Intent<br/>to Levy Issued] --> CDPRights
+    end
+
+    subgraph Request["REQUESTING CDP HEARING"]
+        CDPRights --> Timeline[30 DAYS to Request<br/>CDP Hearing]
+        Timeline --> Form[File Form 12153<br/>Request for CDP Hearing]
+        Form --> Timely{Filed<br/>Within 30 Days?}
+        Timely -->|Yes| FullCDP[FULL CDP RIGHTS<br/>- Collection suspended<br/>- Tax Court review available]
+        Timely -->|No| Equivalent[EQUIVALENT HEARING<br/>- No collection suspension<br/>- No Tax Court review]
+    end
+
+    subgraph Hearing["CDP HEARING"]
+        FullCDP --> Hearing1[Appeals Officer Conducts<br/>CDP Hearing]
+        Hearing1 --> Issues[Can Raise:<br/>- Spousal defenses<br/>- Collection alternatives<br/>- Appropriateness of action<br/>- Challenge liability if no<br/>  prior opportunity]
+        Issues --> Cannot[Cannot Raise:<br/>- Issues already addressed<br/>- Frivolous arguments]
+    end
+
+    subgraph Outcome["CDP DETERMINATION"]
+        Hearing1 --> Determination{CDP<br/>Determination}
+        Determination -->|Sustains IRS| Sustain[IRS Action<br/>Upheld]
+        Determination -->|Taxpayer Wins| Relief[Collection Action<br/>Modified/Withdrawn]
+        Determination -->|Alternative| Alt[Alternative Collection<br/>Method Approved<br/>IA, OIC, etc.]
+    end
+
+    subgraph Appeal["APPEAL TO TAX COURT"]
+        Sustain --> AppealDeadline[30 DAYS to Petition<br/>Tax Court]
+        AppealDeadline --> Petition{Taxpayer<br/>Petitions?}
+        Petition -->|Yes| TCReview[Tax Court Reviews<br/>Abuse of Discretion Standard]
+        Petition -->|No| Enforce[IRS Proceeds with<br/>Collection Action]
+        TCReview --> TCOutcome{Tax Court<br/>Decision}
+        TCOutcome -->|Affirm| CollectionProceeds[Collection<br/>Proceeds]
+        TCOutcome -->|Reverse| Remand[Case Remanded<br/>for Further Review]
+    end
+
+    subgraph Suspension["COLLECTION SUSPENSION"]
+        SuspendNote[During CDP Process:<br/>- Levy action suspended<br/>- Lien remains in place<br/>- CSED suspended<br/>- Interest continues]
+    end
+```
+
+### CDP Quick Reference
+
+| Aspect | Detail |
+|--------|--------|
+| **Triggers** | First NFTL filed, First Intent to Levy notice |
+| **Request Deadline** | 30 days from notice date |
+| **Form Required** | Form 12153 |
+| **Effect on Collection** | Suspended during full CDP hearing |
+| **Issues Allowed** | Spousal defenses, collection alternatives, liability (if not previously addressed) |
+| **Appeal Deadline** | 30 days from CDP determination to Tax Court |
+| **Effect on CSED** | Suspended during CDP process |
+
+---
+
+## Quick Reference: All Critical Timeframes
+
+| Action | Timeframe | Form/Method |
+|--------|-----------|-------------|
+| File Individual Return | April 15 | Form 1040 |
+| Extension to File | October 15 (6 months) | Form 4868 |
+| Payment Due | April 15 (even with extension) | Various methods |
+| IRS Assessment Period | 3 years (generally) | N/A |
+| Extended Assessment (>25% omission) | 6 years | N/A |
+| Fraud/No Return Assessment | Unlimited | N/A |
+| Collection Period (CSED) | 10 years from assessment | N/A |
+| Refund Claim | 3 yrs from filing OR 2 yrs from payment | Form 1040-X |
+| Respond to 30-Day Letter | 30 days | Protest letter |
+| Petition Tax Court | 90 days from 90-Day Letter | Petition |
+| Request CDP Hearing | 30 days from CDP notice | Form 12153 |
+| Appeal CDP to Tax Court | 30 days from determination | Petition |
+| File Refund Suit | 2 years from disallowance | Court filing |
+
+---
+
+*This flowchart guide is based on IRS procedures current through December 31, 2024, as tested on the EA exam May 2025 - February 2026 cycle.*
