@@ -670,13 +670,14 @@ flowchart TD
 
 ## Quick Reference: All Critical Timeframes
 
-| Action | Timeframe | Form/Method | |--------|-----------|-------------|
+| Action | Timeframe | Form / Method |
+|--------|-----------|---------------|
 | File Individual Return | April 15 | Form 1040 |
 | Extension to File | October 15 (6 months) | Form 4868 |
 | Payment Due | April 15 (even with extension) | Various methods |
 | IRS Assessment Period | 3 years (generally) | N/A |
 | Extended Assessment (>25% omission) | 6 years | N/A |
-| Fraud/No Return Assessment | Unlimited | N/A |
+| Fraud / No Return Assessment | Unlimited | N/A |
 | Collection Period (CSED) | 10 years from assessment | N/A |
 | Refund Claim | 3 yrs from filing OR 2 yrs from payment | Form 1040-X |
 | Respond to 30-Day Letter | 30 days | Protest letter |
@@ -684,6 +685,7 @@ flowchart TD
 | Request CDP Hearing | 30 days from CDP notice | Form 12153 |
 | Appeal CDP to Tax Court | 30 days from determination | Petition |
 | File Refund Suit | 2 years from disallowance | Court filing |
+
 
 ---
 
