@@ -441,7 +441,7 @@ flowchart TD
         
         P5[6695e: Failure to File<br/>Correct Information Return] --> Amt5[$60 per failure<br/>Max $30,000/year]
         
-        P6[6695f: Negotiating<br/>Refund Check] --> Amt6[$600 per check<br/>No maximum]
+        P6[6695f: Negotiating<br/>Refund Check] --> Amt6[$635 per check<br/>No maximum]
         
         P7[6695g: Due Diligence<br/>Failure] --> Amt7[$635 per failure<br/>No maximum]
     end
@@ -454,7 +454,7 @@ flowchart TD
 | §6694(a) Unreasonable Position | Greater of $1,000 or 50% of fee | Position lacks substantial authority | Reasonable cause + good faith |
 | §6694(b) Willful/Reckless | Greater of $5,000 or 75% of fee | Willful understatement or reckless disregard | None |
 | §6695(a)-(e) Administrative | $60 per failure | Failure to sign, furnish copy, include PTIN, etc. | Reasonable cause |
-| §6695(f) Negotiating Check | $600 per check | Endorsing or cashing client refund | None |
+| §6695(f) Negotiating Check | $635 per check | Endorsing or cashing client refund | None |
 | §6695(g) Due Diligence | $635 per credit/status | Failure to meet DD requirements | Reasonable cause |
 
 ---
